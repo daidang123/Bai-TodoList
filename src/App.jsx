@@ -1,46 +1,81 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import './App.css';
+import Header from './header/Header';
+import Filter from './Filter/Filter';
+import TodoList from './TodoList/TodoList';
+import Footer from './Footer/Footer';
 
-function App() {
-  const [count, setCount] = useState(0)
+function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  const [filter, setFilter] = useState('all');
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (inputValue.trim() !== '') {
+      const newTodo = {
+        id: Date.now(),
+        text: inputValue,
+        completed: false,
+      };
+      setTodos([...todos, newTodo]);
+      setInputValue('');
+    }
+  };
+
+  const handleTodoCheckboxChange = (id) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
+  };
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const toggleTodo = (id) => {
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === id) {
+        return { ...todo, completed: !todo.completed };
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
+  };
+
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === 'active') {
+      return !todo.completed;
+    }
+    if (filter === 'completed') {
+      return todo.completed;
+    }
+    return true;
+  });
+
+  const handleClearAll = () => {
+    setTodos([]);
+  };
 
   return (
-    <>
-     <div className='container'>
-      <div className='header'>
-        <h1 className='title'>Simple TodoApp</h1>
-        <form action="">
-          <input type="text" placeholder='What do you wany to do ?' />
-          <input type="submit" />
-        </form>
-      </div>
-      <div className='filter'>
-        <form action="">
-          <input type="radio" value="" />All
-          <input type="radio" value="" />Acctive
-          <input type="radio" value="" />Complete
-        </form>
-      </div>
-      <div className='todo-list'>
-       <div className='todo-item'>
-        <input type="checkbox" />State
-       </div>
-       <div className='todo-item'>
-        <input type="checkbox" />Prop
-       </div>
-       <div className='todo-item'>
-        <input type="checkbox" />Component
-       </div>
-      </div>
-      <div className='footer'>
-        <div className='pending'>1 pending</div>
-        <button className='removeAll'>Clear All</button>
-      </div>
-     </div>
-    </>
-  )
+    <div className='container'>
+      <Header inputValue={inputValue} handleInputChange={handleInputChange} handleFormSubmit={handleFormSubmit} />
+      <Filter filter={filter} handleFilterChange={handleFilterChange} />
+      <TodoList todos={filteredTodos} toggleTodo={toggleTodo} />
+      <Footer todos={todos} handleClearAll={handleClearAll} />
+    </div>
+  );
 }
 
-export default App
+export default TodoApp;
