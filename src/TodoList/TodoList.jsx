@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import TodoItem from './TodoItem';
+import { TodoContext } from '../Contexts/TodoContext';
 
-export default function TodoList({ todos, toggleTodo }) {
+function TodoList() {
+  const { filteredTodos} = useContext(TodoContext);
+
   return (
-    <div className="todo-list">
-      {todos.map(todo => (
+    <div className='todo-list'>
+      {filteredTodos.map((todo) => (
         <TodoItem
           key={todo.id}
           todo={todo}
-          toggleTodo={toggleTodo}
         />
       ))}
     </div>
   );
 }
+
+export default TodoList;
+

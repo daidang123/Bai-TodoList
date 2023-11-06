@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react';
 import Form from './Form';
 
-function Header({ inputValue, handleInputChange, handleFormSubmit }) {
-    return (
-      <div className='header'>
-        <h1 className='title'>Simple TodoApp</h1>
+function Header() {
+ 
+
+  return (
+    <header className='header'>
+      <h1 className='heading'>Simple Todo App</h1>
       <Form/>
-      </div>
-    );
-  }
-  
-  export default Header;
+    </header>
+  );
+}
 
-
+export default Header;
